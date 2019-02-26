@@ -1,4 +1,4 @@
-package spring.ApplicationContext;
+package spring.context;
 
 import spring.factory.BeanFactory;
 

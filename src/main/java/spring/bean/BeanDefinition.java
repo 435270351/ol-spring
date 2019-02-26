@@ -1,5 +1,10 @@
 package spring.bean;
 
+import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * （描述）
  *
@@ -7,11 +12,12 @@ package spring.bean;
  * @date 2019-01-30
  * @since (版本)
  */
+@Data
 public class BeanDefinition {
 
     private Object bean;
 
     private String beanClass;
 
-    private PropertyValueList propertyValueList;
+    private List<PropertyValue> propertyValueList = new ArrayList<>();
 }

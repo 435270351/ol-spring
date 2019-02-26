@@ -4,10 +4,10 @@ package service;
  * （描述）
  *
  * @author tangzw
- * @date 2019-01-30
+ * @date 2019-02-26
  * @since (版本)
  */
-public interface HelloService {
+public interface EnService {
 
-    void say();
+    void ha();
 }
