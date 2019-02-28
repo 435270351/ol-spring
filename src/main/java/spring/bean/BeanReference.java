@@ -7,13 +7,24 @@ import lombok.Data;
  *
  * @author tangzw
  * @date 2019-02-26
- * @since (版本)
+ * @since 1.0.0
  */
 @Data
 public class BeanReference {
 
-    private String name;
+    /**
+     * bean名，根据name依赖注入
+     */
+    private String beanName;
 
-    private String value;
+    /**
+     * 类路径，根据type依赖注入
+     */
+    private String beanClass;
+
+    /**
+     * 对象实例
+     */
+    private Object value;
 
 }
