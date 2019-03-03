@@ -13,11 +13,11 @@ import spring.aspect.ServiceAspect;
 @ServiceAspect
 public class HelloServiceImpl implements HelloService {
 
-    @ResourceAspect(name = "en2ServiceImpl")
-    private EnService enService;
+    @ResourceAspect
+    public EnService enService;
 
     public void say() {
-        System.out.println("Hello");
+        System.out.println("Hellos");
         enService.ha();
     }
 

@@ -94,7 +94,7 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
                             // 根据name注入
                             beanReference.setBeanName(beanName);
                             // 根据type注入
-                            beanDefinition.setBeanClass(typeBeanClass);
+                            beanReference.setBeanClass(typeBeanClass);
 
                             beanDefinition.getPropertyValueList().add(new PropertyValue(fieldName,beanReference));
                         }

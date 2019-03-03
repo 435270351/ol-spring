@@ -1,6 +1,7 @@
 package spring.factory;
 
 import org.apache.commons.lang.StringUtils;
+import spring.aop.AspectJAwareAdvisorAutoProxyCreator;
 import spring.bean.BeanDefinition;
 import spring.bean.BeanReference;
 import spring.bean.PropertyValue;
@@ -46,6 +47,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 
             // 属性注入
             object = initializeBean(object, beanDefinition);
+            object = buildProxyBean(object);
             beanDefinition.setBean(object);
         }
 
@@ -54,6 +56,14 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 
     public Map<String, BeanDefinition> getBeanDefinitionMap() {
         return beanDefinitionMap;
+    }
+
+    protected Object buildProxyBean(Object object)throws Exception{
+        AspectJAwareAdvisorAutoProxyCreator proxyCreator = new AspectJAwareAdvisorAutoProxyCreator();
+        proxyCreator.setBeanFactory(this);
+
+        Object proxyBean = proxyCreator.postProcessAfterInitialization(object);
+        return proxyBean;
     }
 
     protected Object createBean(BeanDefinition beanDefinition) {
@@ -83,6 +93,11 @@ public abstract class AbstractBeanFactory implements BeanFactory {
                 }
                 beanReference.setValue(object);
 
+//                System.out.println(bean.getClass().getDeclaredFields().length);
+//                Field[] fields = bean.getClass().getDeclaredFields();
+//                for (Field field:fields){
+//                    System.out.println(field.getName());
+//                }
                 // 通过反射机制赋值
                 Field field = bean.getClass().getDeclaredField(propertyValue.getName());
                 field.setAccessible(true);
