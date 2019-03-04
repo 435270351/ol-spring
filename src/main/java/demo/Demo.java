@@ -1,6 +1,8 @@
 package demo;
 
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ExecutorService;
@@ -182,7 +184,16 @@ public class Demo {
     public static void main(String[] args) {
         Demo demo = new Demo();
 
-        System.out.println(demo.getNum());
+//        System.out.println(demo.getNum());
+
+        List<String> list = new ArrayList<>();
+        list.add("s");
+        list.add("zx");
+
+        Object[][] arr = new Object[1][list.size()];
+
+
+        System.out.println(arr);
 
     }
 

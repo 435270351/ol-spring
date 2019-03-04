@@ -19,6 +19,12 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 public class ThreadDemo {
 
+    public static void main(String[] args) {
+
+        ThreadDemo threadDemo = new ThreadDemo();
+        threadDemo.runCountDownLatch();
+    }
+
     public void runCountDownLatch() {
         CountDownLatch countDownLatch = new CountDownLatch(4);
         CyclicBarrier cyclicBarrier = new CyclicBarrier(4);
@@ -29,12 +35,34 @@ public class ThreadDemo {
         ExecutorService executorService = Executors.newCachedThreadPool();
 
         for (int i = 0; i < 4; i++) {
-            executorService.execute(runnable);
+            executorService.execute(new Runnable() {
+                @Override
+                public void run() {
+                    runSyn();
+                }
+            });
         }
 
         System.out.println("执行结束");
 
 
+    }
+
+    public void runSyn()  {
+        String str = "sd";
+
+        synchronized (str){
+            String threadName = Thread.currentThread().getName();
+
+            System.out.println(threadName);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println(threadName);
+        }
     }
 
     public void runTimeThread(){
@@ -138,9 +166,5 @@ public class ThreadDemo {
         return runnable;
     }
 
-    public static void main(String[] args) {
 
-        ThreadDemo threadDemo = new ThreadDemo();
-        threadDemo.runCountDownLatch();
-    }
 }

@@ -7,6 +7,7 @@ import service.En2ServiceImpl;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 /**
  * CglibAopProxy代理
@@ -17,7 +18,7 @@ import java.lang.reflect.Method;
  */
 public class CglibAopProxy extends AbstractAopProxy {
 
-    public CglibAopProxy(AdvisedSupport advisedSupport){
+    public CglibAopProxy(AdvisedSupport advisedSupport) {
         super(advisedSupport);
     }
 
@@ -38,46 +39,21 @@ public class CglibAopProxy extends AbstractAopProxy {
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
             AdvisedSupport advisedSupport = getAdvisedSupport();
-            MethodMatcher methodMatcher = advisedSupport.getMethodMatcher();
+            List<MethodMatcher> methodMatcherList = advisedSupport.getMethodMatcherList();
 
-            Object object;
-            if (methodMatcher.matches(method)){
-                System.out.println("before 被代理了");
-                object = new CglibMethodInvocation(method,advisedSupport.getTargetSource(),objects).invoke();
-                System.out.println("after 被代理了");
-            }else {
-                object = method.invoke(advisedSupport.getTargetSource().getTarget(),objects);
-            }
-
-            return object;
-        }
-    }
-
-    private class CglibMethodInvocation{
-
-        private Method method;
-
-        private TargetSource targetSource;
-
-        private Object[] params;
-
-        public CglibMethodInvocation(Method method,TargetSource targetSource,Object[] params){
-            this.method = method;
-            this.targetSource = targetSource;
-            this.params = params;
-        }
-
-        public Object invoke(){
             Object object = null;
-            try {
-                object = method.invoke(targetSource.getTarget(),params);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            if (methodMatcher.matches(method)) {
+//                System.out.println("before 被代理了");
+//                object = method.invoke(advisedSupport.getTargetSource().getTarget(), objects);
+//                System.out.println("after 被代理了");
+//            } else {
+//                object = method.invoke(advisedSupport.getTargetSource().getTarget(), objects);
+//            }
 
             return object;
         }
     }
+
 
     public static void main(String[] args) {
         TargetSource targetSource = new TargetSource();

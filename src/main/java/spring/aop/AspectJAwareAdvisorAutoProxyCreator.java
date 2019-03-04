@@ -1,6 +1,5 @@
 package spring.aop;
 
-import service.En2ServiceImpl;
 import spring.factory.AbstractBeanFactory;
 import spring.factory.BeanFactory;
 
@@ -11,15 +10,15 @@ import spring.factory.BeanFactory;
  * @date 2019-03-03
  * @since 1.0.0
  */
-public class AspectJAwareAdvisorAutoProxyCreator implements BeanFactoryAware, BeanPostProcessor {
+public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
 
-    private AbstractBeanFactory abstractBeanFactory;
-
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        abstractBeanFactory = (AbstractBeanFactory) beanFactory;
-
-    }
+//    private AbstractBeanFactory abstractBeanFactory;
+//
+//    @Override
+//    public void setBeanFactory(BeanFactory beanFactory) {
+//        abstractBeanFactory = (AbstractBeanFactory) beanFactory;
+//
+//    }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean) throws Exception {
@@ -33,6 +32,10 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanFactoryAware, Be
         AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
         aspectJExpressionPointcut.setExpression(expression);
 
+        AspectJExpressionPointcut pointcut2 = new AspectJExpressionPointcut();
+        pointcut2.setExpression(expression);
+
+
         // 切面匹配不成功
         if (!aspectJExpressionPointcut.matches(bean.getClass())) {
             return bean;
@@ -45,7 +48,8 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanFactoryAware, Be
 
         AdvisedSupport advisedSupport = new AdvisedSupport();
         advisedSupport.setTargetSource(targetSource);
-        advisedSupport.setMethodMatcher(aspectJExpressionPointcut);
+        advisedSupport.getMethodMatcherList().add(aspectJExpressionPointcut);
+        advisedSupport.getMethodMatcherList().add(pointcut2);
 
         CglibAopProxy cglibAopProxy = new CglibAopProxy(advisedSupport);
         return cglibAopProxy.getProxy();

@@ -47,6 +47,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 
             // 属性注入
             object = initializeBean(object, beanDefinition);
+            // 获取代理对象
             object = buildProxyBean(object);
             beanDefinition.setBean(object);
         }
@@ -60,7 +61,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 
     protected Object buildProxyBean(Object object)throws Exception{
         AspectJAwareAdvisorAutoProxyCreator proxyCreator = new AspectJAwareAdvisorAutoProxyCreator();
-        proxyCreator.setBeanFactory(this);
+//        proxyCreator.setBeanFactory(this);
 
         Object proxyBean = proxyCreator.postProcessAfterInitialization(object);
         return proxyBean;
