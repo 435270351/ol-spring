@@ -1,13 +1,9 @@
-package demo;
-
-import redis.clients.jedis.Jedis;
+package com.demo;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 /**
  * （描述）

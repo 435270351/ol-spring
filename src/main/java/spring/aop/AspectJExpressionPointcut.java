@@ -4,10 +4,6 @@ import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.PointcutParser;
 import org.aspectj.weaver.tools.PointcutPrimitive;
 import org.aspectj.weaver.tools.ShadowMatch;
-import service.EnService;
-import service.EnServiceImpl;
-import service.HelloService;
-import service.HelloServiceImpl;
 
 import java.lang.reflect.Method;
 import java.util.HashSet;
@@ -20,7 +16,7 @@ import java.util.Set;
  * @date 2019-03-03
  * @since 1.0.0
  */
-public class AspectJExpressionPointcut implements ClassFilter, MethodMatcher {
+public class AspectJExpressionPointcut implements ClassMatcher {
 
     private PointcutParser pointcutParser;
 
@@ -103,8 +99,6 @@ public class AspectJExpressionPointcut implements ClassFilter, MethodMatcher {
         AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
         aspectJExpressionPointcut.setExpression(expression);
 
-        Class clazz = EnService.class;
-        System.out.println(aspectJExpressionPointcut.matches(clazz));
     }
 
 }

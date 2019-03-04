@@ -1,13 +1,12 @@
 package spring.reader;
 
-import service.HelloServiceImpl;
-import spring.aspect.ResourceAspect;
-import spring.aspect.ServiceAspect;
+import com.service.HelloServiceImpl;
+import spring.annotation.Resource;
+import spring.annotation.Service;
 import spring.bean.BeanDefinition;
 import spring.bean.BeanReference;
 import spring.bean.PropertyValue;
 
-import javax.annotation.Resource;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -73,14 +72,14 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
                 Class clazz = Class.forName(beanClass);
 
                 // 添加了ServiceAspect注解才能被加载
-                if (clazz.isAnnotationPresent(ServiceAspect.class)){
+                if (clazz.isAnnotationPresent(Service.class)){
                     BeanDefinition beanDefinition = new BeanDefinition();
 
                     // 获取所有的属性
                     Field[] fields = clazz.getDeclaredFields();
                     for (Field field:fields){
                         // 添加了ResourceAspect的属性，需要被注入
-                        if (field.isAnnotationPresent(ResourceAspect.class)){
+                        if (field.isAnnotationPresent(Resource.class)){
                             BeanReference beanReference = new BeanReference();
 
                             // 属性名
@@ -88,8 +87,8 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
                             // 类型的类路径
                             String typeBeanClass = field.getType().getName();
 
-                            ResourceAspect resourceAspect = field.getAnnotation(ResourceAspect.class);
-                            String beanName = resourceAspect.name();
+                            Resource resource = field.getAnnotation(Resource.class);
+                            String beanName = resource.value();
 
                             // 根据name注入
                             beanReference.setBeanName(beanName);

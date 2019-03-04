@@ -1,10 +1,9 @@
-package demo;
+package com.demo;
 
+import com.service.HelloServiceImpl;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import service.HelloService;
-import service.HelloServiceImpl;
 
 import java.lang.reflect.Method;
 

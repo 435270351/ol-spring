@@ -1,7 +1,8 @@
-package demo;
+package com.demo;
 
-import service.HelloService;
-import service.HelloServiceImpl;
+
+import com.service.HelloService;
+import com.service.HelloServiceImpl;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

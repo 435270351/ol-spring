@@ -14,8 +14,11 @@ public abstract class AbstractAopProxy implements AopProxy{
 
     private AdvisedSupport advisedSupport;
 
-    protected AbstractAopProxy(AdvisedSupport advisedSupport){
+    private TargetSource targetSource;
+
+    protected AbstractAopProxy(AdvisedSupport advisedSupport,TargetSource targetSource){
         this.advisedSupport = advisedSupport;
+        this.targetSource = targetSource;
     }
 
     public AdvisedSupport getAdvisedSupport() {
@@ -24,5 +27,13 @@ public abstract class AbstractAopProxy implements AopProxy{
 
     public void setAdvisedSupport(AdvisedSupport advisedSupport) {
         this.advisedSupport = advisedSupport;
+    }
+
+    public TargetSource getTargetSource() {
+        return targetSource;
+    }
+
+    public void setTargetSource(TargetSource targetSource) {
+        this.targetSource = targetSource;
     }
 }

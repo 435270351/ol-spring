@@ -1,5 +1,6 @@
 package demo;
 
+import com.demo.DemoService;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

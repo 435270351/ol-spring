@@ -1,4 +1,4 @@
-package spring.aspect;
+package spring.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -7,16 +7,16 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * （描述）
+ * 前置通知注解
  *
  * @author tangzw
  * @date 2019-02-26
- * @since (版本)
+ * @since 1.0.0
  */
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface ResourceAspect {
+public @interface Before {
 
-    String name () default "";
+    String value() default "";
 }

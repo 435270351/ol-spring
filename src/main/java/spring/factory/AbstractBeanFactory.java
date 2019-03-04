@@ -1,6 +1,7 @@
 package spring.factory;
 
 import org.apache.commons.lang.StringUtils;
+import spring.aop.AdvisedSupport;
 import spring.aop.AspectJAwareAdvisorAutoProxyCreator;
 import spring.bean.BeanDefinition;
 import spring.bean.BeanReference;
@@ -26,6 +27,8 @@ public abstract class AbstractBeanFactory implements BeanFactory {
      * name与BeanDefinition的关系
      */
     private Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
+
+    private AdvisedSupport advisedSupport = new AdvisedSupport();
 
     @Override
     public Object getBean(String name) throws Exception {
@@ -60,7 +63,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
     }
 
     protected Object buildProxyBean(Object object)throws Exception{
-        AspectJAwareAdvisorAutoProxyCreator proxyCreator = new AspectJAwareAdvisorAutoProxyCreator();
+        AspectJAwareAdvisorAutoProxyCreator proxyCreator = new AspectJAwareAdvisorAutoProxyCreator(this);
 //        proxyCreator.setBeanFactory(this);
 
         Object proxyBean = proxyCreator.postProcessAfterInitialization(object);
@@ -183,4 +186,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         return object;
     }
 
+    public AdvisedSupport getAdvisedSupport() {
+        return advisedSupport;
+    }
 }

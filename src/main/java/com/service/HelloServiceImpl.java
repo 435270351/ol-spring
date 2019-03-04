@@ -1,7 +1,7 @@
-package service;
+package com.service;
 
-import spring.aspect.ResourceAspect;
-import spring.aspect.ServiceAspect;
+import spring.annotation.Resource;
+import spring.annotation.Service;
 
 /**
  * （描述）
@@ -10,10 +10,10 @@ import spring.aspect.ServiceAspect;
  * @date 2019-01-30
  * @since (版本)
  */
-@ServiceAspect
+@Service
 public class HelloServiceImpl implements HelloService {
 
-    @ResourceAspect
+    @Resource
     public EnService enService;
 
     public void say() {

@@ -1,4 +1,6 @@
-package demo;
+package com.demo;
+
+import com.service.HelloService;
 
 import java.lang.reflect.Proxy;
 import java.util.ArrayList;
@@ -149,10 +151,7 @@ public class Demo {
     }
 
     public void myInvocationHandler(){
-        MyInvocationHandler handler = new MyInvocationHandler(new HelloService());
-        Hello hello = (Hello) Proxy.newProxyInstance(getClass().getClassLoader(),HelloService.class.getInterfaces(),handler);
 
-        hello.say();
 
     }
 

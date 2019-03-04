@@ -1,7 +1,6 @@
 package spring.aop;
 
 import spring.factory.AbstractBeanFactory;
-import spring.factory.BeanFactory;
 
 /**
  * bean代理创建
@@ -12,13 +11,11 @@ import spring.factory.BeanFactory;
  */
 public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
 
-//    private AbstractBeanFactory abstractBeanFactory;
-//
-//    @Override
-//    public void setBeanFactory(BeanFactory beanFactory) {
-//        abstractBeanFactory = (AbstractBeanFactory) beanFactory;
-//
-//    }
+    private AbstractBeanFactory abstractBeanFactory;
+
+    public AspectJAwareAdvisorAutoProxyCreator(AbstractBeanFactory abstractBeanFactory) {
+        this.abstractBeanFactory = abstractBeanFactory;
+    }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean) throws Exception {
@@ -28,16 +25,10 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean) throws Exception {
 
-        String expression = "execution(* service.EnService.*(..))";
-        AspectJExpressionPointcut aspectJExpressionPointcut = new AspectJExpressionPointcut();
-        aspectJExpressionPointcut.setExpression(expression);
-
-        AspectJExpressionPointcut pointcut2 = new AspectJExpressionPointcut();
-        pointcut2.setExpression(expression);
-
+        AdvisedSupport advisedSupport = abstractBeanFactory.getAdvisedSupport();
 
         // 切面匹配不成功
-        if (!aspectJExpressionPointcut.matches(bean.getClass())) {
+        if (!advisedSupport.classMatcher(bean.getClass())) {
             return bean;
         }
 
@@ -46,12 +37,7 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
         targetSource.setInterfaces(bean.getClass().getInterfaces());
         targetSource.setTarget(bean);
 
-        AdvisedSupport advisedSupport = new AdvisedSupport();
-        advisedSupport.setTargetSource(targetSource);
-        advisedSupport.getMethodMatcherList().add(aspectJExpressionPointcut);
-        advisedSupport.getMethodMatcherList().add(pointcut2);
-
-        CglibAopProxy cglibAopProxy = new CglibAopProxy(advisedSupport);
+        CglibAopProxy cglibAopProxy = new CglibAopProxy(advisedSupport, targetSource);
         return cglibAopProxy.getProxy();
     }
 }

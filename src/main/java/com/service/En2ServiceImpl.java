@@ -1,6 +1,6 @@
-package service;
+package com.service;
 
-import spring.aspect.ServiceAspect;
+import spring.annotation.Service;
 
 /**
  * （描述）
@@ -9,7 +9,7 @@ import spring.aspect.ServiceAspect;
  * @date 2019-02-27
  * @since (版本)
  */
-//@ServiceAspect
+//@Service
 public class En2ServiceImpl implements EnService {
 
     @Override

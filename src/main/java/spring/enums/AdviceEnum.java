@@ -7,7 +7,7 @@ package spring.enums;
  * @date 2019-03-04
  * @since 1.0.0
  */
-public enum AdviceMethodEnum {
+public enum AdviceEnum {
 
     BEFORE("前置通知"),
 
@@ -17,7 +17,7 @@ public enum AdviceMethodEnum {
 
     private String desc;
 
-    AdviceMethodEnum(String desc) {
+    AdviceEnum(String desc) {
         this.desc = desc;
     }
 }

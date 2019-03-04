@@ -1,7 +1,7 @@
 package spring.context;
 
-import service.En2ServiceImpl;
-import service.HelloService;
+
+import com.service.HelloService;
 import spring.bean.BeanDefinition;
 import spring.factory.AbstractBeanFactory;
 import spring.factory.AutowireCapableBeanFactory;
@@ -47,7 +47,7 @@ public class AnnotationApplicationContext extends AbstractApplicationContext {
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext applicationContext = new AnnotationApplicationContext("service");
+        ApplicationContext applicationContext = new AnnotationApplicationContext("com.service");
         HelloService service = (HelloService) applicationContext.getBean("HelloServiceImpl");
 
         service.say();
