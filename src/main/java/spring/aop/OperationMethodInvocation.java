@@ -17,28 +17,28 @@ public interface OperationMethodInvocation {
      *
      * @param method
      * @param target
-     * @param classMatcherList
+     * @param aopMethodList
      * @return
      */
-    MethodInvocation beforeMethodInvocation(Method method, MethodInvocation target, List<ClassMatcher> classMatcherList);
+    MethodInvocation beforeMethodInvocation(Method method, MethodInvocation target, List<AopMethod> aopMethodList);
 
     /**
      * 环绕通知装饰
      *
      * @param method
      * @param target
-     * @param classMatcherList
+     * @param aopMethodList
      * @return
      */
-    MethodInvocation aroundMethodInvocation(Method method, MethodInvocation target, List<ClassMatcher> classMatcherList);
+    MethodInvocation aroundMethodInvocation(Method method, MethodInvocation target, List<AopMethod> aopMethodList);
 
     /**
      * 后置通知装饰
      *
      * @param method
      * @param target
-     * @param classMatcherList
+     * @param aopMethodList
      * @return
      */
-    MethodInvocation afterMethodInvocation(Method method, MethodInvocation target, List<ClassMatcher> classMatcherList);
+    MethodInvocation afterMethodInvocation(Method method, MethodInvocation target, List<AopMethod> aopMethodList);
 }

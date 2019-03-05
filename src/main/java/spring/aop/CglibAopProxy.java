@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class CglibAopProxy extends AbstractAopProxy {
 
-    public CglibAopProxy(AdvisedSupport advisedSupport,TargetSource targetSource) {
-        super(advisedSupport,targetSource);
+    public CglibAopProxy(AdvisedSupport advisedSupport, TargetSource targetSource) {
+        super(advisedSupport, targetSource);
     }
 
     @Override
@@ -39,20 +39,19 @@ public class CglibAopProxy extends AbstractAopProxy {
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
             AdvisedSupport advisedSupport = getAdvisedSupport();
 
-            MethodInvocation methodInvocation = new CglibMethodInvocation(method, getTargetSource(), objects);
+            MethodInvocation methodInvocation = new TargetMethodInvocation(method, getTargetSource(), objects);
 
             // 装饰环绕置通知
-            List<ClassMatcher> aroundClassMatcherList = advisedSupport.getAroundClassMatcherList();
-            methodInvocation = aroundMethodInvocation(method, methodInvocation, aroundClassMatcherList);
+            List<AopMethod> aroundAopMethodList = advisedSupport.getAroundAopMethod();
+            methodInvocation = aroundMethodInvocation(method, methodInvocation, aroundAopMethodList);
 
             // 装饰前置通知
-            List<ClassMatcher> beforeClassMatcherList = advisedSupport.getBeforeClassMatcherList();
-            methodInvocation = beforeMethodInvocation(method, methodInvocation, beforeClassMatcherList);
+            List<AopMethod> beforeAopMethodList = advisedSupport.getBeforeAopMethod();
+            methodInvocation = beforeMethodInvocation(method, methodInvocation, beforeAopMethodList);
 
             // 装饰后置通知
-            List<ClassMatcher> afterClassMatcherList = advisedSupport.getAfterClassMatcherList();
-            methodInvocation = afterMethodInvocation(method, methodInvocation, afterClassMatcherList);
-
+            List<AopMethod> afterAopMethodList = advisedSupport.getAfterAopMethod();
+            methodInvocation = afterMethodInvocation(method, methodInvocation, afterAopMethodList);
 
             Object object = methodInvocation.invoke();
 
@@ -60,11 +59,11 @@ public class CglibAopProxy extends AbstractAopProxy {
         }
 
         @Override
-        public MethodInvocation beforeMethodInvocation(Method method, MethodInvocation target, List<ClassMatcher> classMatcherList) {
+        public MethodInvocation beforeMethodInvocation(Method method, MethodInvocation target, List<AopMethod> aopMethodList) {
             MethodInvocation val = target;
-            for (ClassMatcher classMatcher : classMatcherList) {
-                if (classMatcher.matches(method)) {
-                    BeforeMethodInvocation beforeMethodInvocation = new BeforeMethodInvocation(val);
+            for (AopMethod aopMethod : aopMethodList) {
+                if (aopMethod.getClassMatcher().matches(method)) {
+                    BeforeMethodInvocation beforeMethodInvocation = new BeforeMethodInvocation(val, aopMethod);
                     val = beforeMethodInvocation;
                 }
             }
@@ -73,11 +72,11 @@ public class CglibAopProxy extends AbstractAopProxy {
         }
 
         @Override
-        public MethodInvocation aroundMethodInvocation(Method method, MethodInvocation target, List<ClassMatcher> classMatcherList) {
+        public MethodInvocation aroundMethodInvocation(Method method, MethodInvocation target, List<AopMethod> aopMethodList) {
             MethodInvocation val = target;
-            for (ClassMatcher classMatcher : classMatcherList) {
-                if (classMatcher.matches(method)) {
-                    AroundMethodInvocation aroundMethodInvocation = new AroundMethodInvocation(val);
+            for (AopMethod aopMethod : aopMethodList) {
+                if (aopMethod.getClassMatcher().matches(method)) {
+                    AroundMethodInvocation aroundMethodInvocation = new AroundMethodInvocation(val, aopMethod);
                     val = aroundMethodInvocation;
                 }
             }
@@ -86,7 +85,7 @@ public class CglibAopProxy extends AbstractAopProxy {
         }
 
         @Override
-        public MethodInvocation afterMethodInvocation(Method method, MethodInvocation target, List<ClassMatcher> classMatcherList) {
+        public MethodInvocation afterMethodInvocation(Method method, MethodInvocation target, List<AopMethod> aopMethodList) {
             MethodInvocation val = target;
             for (ClassMatcher classMatcher : classMatcherList) {
                 if (classMatcher.matches(method)) {
@@ -105,9 +104,9 @@ public class CglibAopProxy extends AbstractAopProxy {
         targetSource.setInterfaces(En2ServiceImpl.class.getInterfaces());
 
         AdvisedSupport advisedSupport = new AdvisedSupport();
-//        advisedSupport.setTargetSource(targetSource);
+        //        advisedSupport.setTargetSource(targetSource);
 
-        CglibAopProxy cglibAopProxy = new CglibAopProxy(advisedSupport,targetSource);
+        CglibAopProxy cglibAopProxy = new CglibAopProxy(advisedSupport, targetSource);
         En2ServiceImpl en2Service = (En2ServiceImpl) cglibAopProxy.getProxy();
         en2Service.ha();
     }

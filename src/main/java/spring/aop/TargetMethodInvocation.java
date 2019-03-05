@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * @date 2019-03-04
  * @since 1.0.0
  */
-public class CglibMethodInvocation implements MethodInvocation {
+public class TargetMethodInvocation implements MethodInvocation {
 
     private Method method;
 
@@ -17,7 +17,7 @@ public class CglibMethodInvocation implements MethodInvocation {
 
     private Object[] params;
 
-    public CglibMethodInvocation(Method method, TargetSource targetSource, Object[] params) {
+    public TargetMethodInvocation(Method method, TargetSource targetSource, Object[] params) {
         this.method = method;
         this.targetSource = targetSource;
         this.params = params;

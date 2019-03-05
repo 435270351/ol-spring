@@ -1,5 +1,7 @@
 package spring.aop;
 
+import java.lang.reflect.Method;
+
 /**
  * 后置通知
  *
@@ -7,19 +9,17 @@ package spring.aop;
  * @date 2019-03-04
  * @since 1.0.0
  */
-public class AfterMethodInvocation implements MethodInvocation {
+public class AfterMethodInvocation extends AbstractMethodInvocation {
 
-    private MethodInvocation methodInvocation;
-
-    public AfterMethodInvocation(MethodInvocation methodInvocation){
-        this.methodInvocation = methodInvocation;
+    public AfterMethodInvocation(MethodInvocation methodInvocation, AopMethod aopMethod) {
+        super(methodInvocation, aopMethod);
     }
 
     @Override
     public Object invoke() {
 
-        Object object = methodInvocation.invoke();
-        System.out.println("后置通知");
+        Object object = getMethodInvocation().invoke();
+//        method.
 
         return object;
     }

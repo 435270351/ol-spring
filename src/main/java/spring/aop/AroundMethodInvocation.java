@@ -1,5 +1,7 @@
 package spring.aop;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * 环绕通知
  *
@@ -7,20 +9,23 @@ package spring.aop;
  * @date 2019-03-04
  * @since 1.0.0
  */
-public class AroundMethodInvocation implements MethodInvocation {
+public class AroundMethodInvocation extends AbstractMethodInvocation {
 
-    private MethodInvocation methodInvocation;
-
-    public AroundMethodInvocation(MethodInvocation methodInvocation){
-        this.methodInvocation = methodInvocation;
+    public AroundMethodInvocation(MethodInvocation methodInvocation, AopMethod aopMethod) {
+        super(methodInvocation, aopMethod);
     }
 
     @Override
     public Object invoke() {
-        System.out.println("环绕通知Start");
-        Object object = methodInvocation.invoke();
-        System.out.println("环绕通知End");
 
-        return object;
+        try {
+            Object object = aopMethod.getMethod().invoke(aopMethod.getTarget(),methodInvocation);
+
+            return object;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

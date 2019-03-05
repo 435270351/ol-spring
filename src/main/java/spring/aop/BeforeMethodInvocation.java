@@ -1,5 +1,7 @@
 package spring.aop;
 
+import java.lang.reflect.InvocationTargetException;
+
 /**
  * 前置通知
  *
@@ -7,20 +9,25 @@ package spring.aop;
  * @date 2019-03-04
  * @since 1.0.0
  */
-public class BeforeMethodInvocation implements MethodInvocation {
+public class BeforeMethodInvocation extends AbstractMethodInvocation {
 
-    private MethodInvocation methodInvocation;
-
-    public BeforeMethodInvocation(MethodInvocation methodInvocation){
-        this.methodInvocation = methodInvocation;
+    public BeforeMethodInvocation(MethodInvocation methodInvocation, AopMethod aopMethod) {
+        super(methodInvocation, aopMethod);
     }
 
     @Override
     public Object invoke() {
-        System.out.println("前置通知");
-        Object object = methodInvocation.invoke();
+        try {
+            aopMethod.getMethod().invoke(aopMethod.getTarget());
+            Object object = getMethodInvocation().invoke();
 
-        return object;
+            return object;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+
     }
 
 }

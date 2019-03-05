@@ -101,8 +101,7 @@ public class ArDemo {
     public static void main(String[] args) {
         ArDemo arDemo = new ArDemo();
 
-        int[] arr = { 1,2,2,4,5,5 };
-        System.out.println(arDemo.findPosition(arr,6));
+        System.out.println(Math.ceil(5.0/4.0));
     }
 }
 
