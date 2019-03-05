@@ -1,13 +1,9 @@
 package spring.context;
 
-
 import com.service.HelloService;
-import spring.bean.BeanDefinition;
 import spring.factory.AbstractBeanFactory;
 import spring.factory.AutowireCapableBeanFactory;
 import spring.reader.AnnotationBeanDefinitionReader;
-
-import java.util.Map;
 
 /**
  * 注解类加载
@@ -21,33 +17,28 @@ public class AnnotationApplicationContext extends AbstractApplicationContext {
     /**
      * 需要加载的包路径
      */
-    private String location;
+    private String[] locations;
 
-    public AnnotationApplicationContext(String location) {
-        this(location, new AutowireCapableBeanFactory());
+    public AnnotationApplicationContext(String[] locations) {
+        this(locations, new AutowireCapableBeanFactory());
     }
 
-    public AnnotationApplicationContext(String location, AbstractBeanFactory abstractBeanFactory) {
+    public AnnotationApplicationContext(String[] locations, AbstractBeanFactory abstractBeanFactory) {
         super(abstractBeanFactory);
-        this.location = location;
+        this.locations = locations;
         this.refresh();
     }
 
     @Override
     protected void loadBeanDefinitions(AbstractBeanFactory abstractBeanFactory) {
         // 交给AnnotationBeanDefinitionReader去加载我们添加的注解bean
-        AnnotationBeanDefinitionReader annotationBeanDefinitionReader = new AnnotationBeanDefinitionReader(location);
+        AnnotationBeanDefinitionReader annotationBeanDefinitionReader = new AnnotationBeanDefinitionReader(locations, abstractBeanFactory);
         annotationBeanDefinitionReader.loadBeanDefinitions();
-
-        // 获取到BeanDefinition关系需要添加到AbstractBeanFactory的beanDefinitionMap里
-        Map<String, BeanDefinition> register = annotationBeanDefinitionReader.getRegister();
-        for (String key : register.keySet()) {
-            abstractBeanFactory.getBeanDefinitionMap().put(key.toLowerCase(), register.get(key));
-        }
     }
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext applicationContext = new AnnotationApplicationContext("com.service");
+        String[] locations = { "com.service","com.aspect" };
+        ApplicationContext applicationContext = new AnnotationApplicationContext(locations);
         HelloService service = (HelloService) applicationContext.getBean("HelloServiceImpl");
 
         service.say();

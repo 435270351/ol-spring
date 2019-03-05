@@ -1,9 +1,6 @@
 package spring.reader;
 
-import spring.bean.BeanDefinition;
-
-import java.util.HashMap;
-import java.util.Map;
+import spring.factory.AbstractBeanFactory;
 
 /**
  * 通过继承该类来实现自定义的配置读取
@@ -17,23 +14,21 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
     /**
      * 读取地址路径
      */
-    private String location;
+    protected String[] locations;
 
-    /**
-     * beanName与BeanDefinition的关系
-     */
-    private Map<String,BeanDefinition> register;
+    protected AbstractBeanFactory abstractBeanFactory;
 
-    public AbstractBeanDefinitionReader(String location){
-        this.location = location.replace('.','/');
-        this.register = new HashMap<>();
+    public AbstractBeanDefinitionReader(String[] locations, AbstractBeanFactory abstractBeanFactory) {
+        for (int i = 0; i < locations.length; i++) {
+            String location = locations[i].replace('.', '/');
+            location = this.getClass().getClassLoader().getResource("").getPath()+ location;
+
+            locations[i] = location;
+        }
+
+        this.locations = locations;
+        this.abstractBeanFactory = abstractBeanFactory;
+
     }
 
-    public String getLocation() {
-        return this.getClass().getClassLoader().getResource("").getPath() + location;
-    }
-
-    public Map<String, BeanDefinition> getRegister() {
-        return register;
-    }
 }

@@ -1,7 +1,5 @@
 package spring.aop;
 
-import java.lang.reflect.Method;
-
 /**
  * 后置通知
  *
@@ -18,9 +16,15 @@ public class AfterMethodInvocation extends AbstractMethodInvocation {
     @Override
     public Object invoke() {
 
-        Object object = getMethodInvocation().invoke();
-//        method.
+        try {
+            Object object = getMethodInvocation().invoke();
+            aopMethod.getMethod().invoke(aopMethod.getTarget());
 
-        return object;
+            return object;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

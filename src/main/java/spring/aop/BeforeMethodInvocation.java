@@ -1,7 +1,5 @@
 package spring.aop;
 
-import java.lang.reflect.InvocationTargetException;
-
 /**
  * 前置通知
  *

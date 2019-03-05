@@ -30,14 +30,13 @@ public class AdvisedSupport {
     static {
         List<AopMethod> beforeList = new ArrayList<>();
         List<AopMethod> aroundList = new ArrayList<>();
-        List<AopMethod> afterList= new ArrayList<>();
+        List<AopMethod> afterList = new ArrayList<>();
 
         classMatcherMap.put(AdviceEnum.BEFORE, beforeList);
         classMatcherMap.put(AdviceEnum.AROUND, aroundList);
         classMatcherMap.put(AdviceEnum.AFTER, afterList);
 
     }
-
 
     private List<AopMethod> getAopMethod(AdviceEnum val) {
         return classMatcherMap.get(val);
@@ -55,11 +54,15 @@ public class AdvisedSupport {
         return getAopMethod(AdviceEnum.AFTER);
     }
 
-    public static void addClassMatcher(ClassMatcher classMatcher) {
+    public void addAopMethod(AdviceEnum adviceEnum, AopMethod aopMethod) {
+        getAopMethod(adviceEnum).add(aopMethod);
+    }
+
+    public void addClassMatcher(ClassMatcher classMatcher) {
         classMatcherList.add(classMatcher);
     }
 
-    public static List<ClassMatcher> getClassMatcherList() {
+    public List<ClassMatcher> getClassMatcherList() {
         return classMatcherList;
     }
 

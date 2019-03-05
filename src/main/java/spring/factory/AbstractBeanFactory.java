@@ -43,7 +43,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         if (object == null) {
             // 创建bean
             object = createBean(beanDefinition);
-            if (object == null){
+            if (object == null) {
                 // 创建失败
                 return null;
             }
@@ -62,11 +62,10 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         return beanDefinitionMap;
     }
 
-    protected Object buildProxyBean(Object object)throws Exception{
+    protected Object buildProxyBean(Object object) throws Exception {
         AspectJAwareAdvisorAutoProxyCreator proxyCreator = new AspectJAwareAdvisorAutoProxyCreator(this);
-//        proxyCreator.setBeanFactory(this);
-
         Object proxyBean = proxyCreator.postProcessAfterInitialization(object);
+
         return proxyBean;
     }
 
@@ -97,11 +96,6 @@ public abstract class AbstractBeanFactory implements BeanFactory {
                 }
                 beanReference.setValue(object);
 
-//                System.out.println(bean.getClass().getDeclaredFields().length);
-//                Field[] fields = bean.getClass().getDeclaredFields();
-//                for (Field field:fields){
-//                    System.out.println(field.getName());
-//                }
                 // 通过反射机制赋值
                 Field field = bean.getClass().getDeclaredField(propertyValue.getName());
                 field.setAccessible(true);
