@@ -1,11 +1,12 @@
 package com.aspect;
 
-import spring.annotation.After;
-import spring.annotation.Around;
-import spring.annotation.Aspect;
-import spring.annotation.Before;
-import spring.annotation.PointCut;
+
 import spring.aop.MethodInvocation;
+import spring.common.annotation.After;
+import spring.common.annotation.Around;
+import spring.common.annotation.Aspect;
+import spring.common.annotation.Before;
+import spring.common.annotation.PointCut;
 
 /**
  * aop测试

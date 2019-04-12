@@ -1,7 +1,7 @@
 package com.service;
 
-import spring.annotation.Resource;
-import spring.annotation.Service;
+import spring.common.annotation.Resource;
+import spring.common.annotation.Service;
 
 /**
  * （描述）
@@ -18,7 +18,7 @@ public class HelloServiceImpl implements HelloService {
 
     public void say() {
         System.out.println("Hellos");
-        enService.ha();
+//        enService.ha();
     }
 
     public EnService getEnService() {

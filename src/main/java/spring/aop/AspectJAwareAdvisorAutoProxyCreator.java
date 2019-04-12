@@ -1,6 +1,6 @@
 package spring.aop;
 
-import spring.factory.AbstractBeanFactory;
+import spring.ioc.factory.DefaultListableBeanFactory;
 
 /**
  * bean代理创建
@@ -11,10 +11,10 @@ import spring.factory.AbstractBeanFactory;
  */
 public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
 
-    private AbstractBeanFactory abstractBeanFactory;
+    private DefaultListableBeanFactory defaultListableBeanFactory;
 
-    public AspectJAwareAdvisorAutoProxyCreator(AbstractBeanFactory abstractBeanFactory) {
-        this.abstractBeanFactory = abstractBeanFactory;
+    public AspectJAwareAdvisorAutoProxyCreator(DefaultListableBeanFactory defaultListableBeanFactory) {
+        this.defaultListableBeanFactory = defaultListableBeanFactory;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
     @Override
     public Object postProcessAfterInitialization(Object bean) throws Exception {
 
-        AdvisedSupport advisedSupport = abstractBeanFactory.getAdvisedSupport();
+        AdvisedSupport advisedSupport = defaultListableBeanFactory.getAdvisedSupport();
 
         // 切面匹配不成功
         if (!advisedSupport.classMatcher(bean.getClass())) {

@@ -1,6 +1,6 @@
 package com.service;
 
-import spring.annotation.Service;
+import spring.common.annotation.Service;
 
 /**
  * （描述）

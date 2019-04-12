@@ -1,6 +1,6 @@
 package spring.aop;
 
-import spring.factory.BeanFactory;
+import spring.ioc.factory.DefaultListableBeanFactory;
 
 /**
  * （描述）
@@ -11,5 +11,5 @@ import spring.factory.BeanFactory;
  */
 public interface BeanFactoryAware {
 
-    void setBeanFactory(BeanFactory beanFactory) throws Exception;
+    void setBeanFactory(DefaultListableBeanFactory defaultListableBeanFactory) throws Exception;
 }
