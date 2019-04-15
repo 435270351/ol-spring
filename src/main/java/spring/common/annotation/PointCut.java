@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
  * @date 2019-02-26
  * @since 1.0.0
  */
-@Target(ElementType.FIELD)
+@Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface PointCut {
 

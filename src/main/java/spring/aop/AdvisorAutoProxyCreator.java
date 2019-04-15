@@ -9,12 +9,12 @@ import spring.ioc.factory.DefaultListableBeanFactory;
  * @date 2019-03-03
  * @since 1.0.0
  */
-public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
+public class AdvisorAutoProxyCreator implements BeanPostProcessor {
 
-    private DefaultListableBeanFactory defaultListableBeanFactory;
+    private AdvisedSupport advisedSupport;
 
-    public AspectJAwareAdvisorAutoProxyCreator(DefaultListableBeanFactory defaultListableBeanFactory) {
-        this.defaultListableBeanFactory = defaultListableBeanFactory;
+    public AdvisorAutoProxyCreator(AdvisedSupport advisedSupport) {
+        this.advisedSupport = advisedSupport;
     }
 
     @Override
@@ -24,8 +24,6 @@ public class AspectJAwareAdvisorAutoProxyCreator implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean) throws Exception {
-
-        AdvisedSupport advisedSupport = defaultListableBeanFactory.getAdvisedSupport();
 
         // 切面匹配不成功
         if (!advisedSupport.classMatcher(bean.getClass())) {

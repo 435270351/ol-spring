@@ -36,10 +36,10 @@ public class BeanDefinition {
     private String scope;
 
     public boolean isSingleton() {
-        return "singleton".equals(this.scope) || "".equals(this.scope);
+        return scope == null || "singleton".equals(scope) || "".equals(scope);
     }
 
     public boolean isPrototype() {
-        return "prototype".equals(this.scope);
+        return "prototype".equals(scope);
     }
 }

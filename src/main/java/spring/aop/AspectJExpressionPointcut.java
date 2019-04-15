@@ -88,7 +88,6 @@ public class AspectJExpressionPointcut implements ClassMatcher {
             }
             return false;
         }catch (Exception e){
-            // TODO:其他情况不判断了！见org.springframework.aop.aspectj.RuntimeTestWalker
             System.out.println("地址配置有误："+expression);
             return false;
         }

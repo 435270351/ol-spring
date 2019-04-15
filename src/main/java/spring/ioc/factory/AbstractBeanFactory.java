@@ -20,29 +20,28 @@ public abstract class AbstractBeanFactory implements BeanFactory {
      */
     protected Map<String, BeanDefinition> beanDefinitionMap = new HashMap<>();
 
-
     @Override
     public Object getBean(String name) throws Exception {
         return doGetBean(name);
     }
 
-    protected Object doGetBean(String name)throws Exception {
+    protected Object doGetBean(String name) throws Exception {
         // 不区分大小写
         BeanDefinition beanDefinition = beanDefinitionMap.get(name.toLowerCase());
 
         if (beanDefinition == null) {
-            throw new Exception("不存在的bean：" + name);
+            throw new RuntimeException("不存在的bean：" + name);
         }
 
         Object object = null;
 
-        if (beanDefinition.isSingleton()){
+        if (beanDefinition.isSingleton()) {
             // 单例模式
             object = beanDefinition.getBean();
 
             if (object == null) {
                 // 创建bean
-                object = getSingleton( new ObjectFactory() {
+                object = getSingleton(new ObjectFactory() {
                     @Override
                     public Object getObject() throws Exception {
                         return AbstractBeanFactory.this.createBean(beanDefinition);
@@ -51,7 +50,7 @@ public abstract class AbstractBeanFactory implements BeanFactory {
 
             }
 
-        }else if (beanDefinition.isPrototype()){
+        } else if (beanDefinition.isPrototype()) {
             // 原型模式
             object = createBean(beanDefinition);
 
@@ -64,5 +63,5 @@ public abstract class AbstractBeanFactory implements BeanFactory {
         return objectFactory.getObject();
     }
 
-    protected abstract Object createBean(BeanDefinition beanDefinition)throws Exception;
+    protected abstract Object createBean(BeanDefinition beanDefinition) throws Exception;
 }

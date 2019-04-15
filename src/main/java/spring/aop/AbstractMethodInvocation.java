@@ -1,6 +1,6 @@
 package spring.aop;
 
-import java.lang.reflect.Method;
+import spring.aop.invocation.MethodInvocation;
 
 /**
  * 用来实现装饰模式
@@ -13,9 +13,9 @@ public abstract class AbstractMethodInvocation implements MethodInvocation {
 
     protected MethodInvocation methodInvocation;
 
-    protected AopMethod aopMethod;
+    protected Advisor aopMethod;
 
-    public AbstractMethodInvocation(MethodInvocation methodInvocation, AopMethod aopMethod) {
+    public AbstractMethodInvocation(MethodInvocation methodInvocation, Advisor aopMethod) {
         this.methodInvocation = methodInvocation;
         this.aopMethod = aopMethod;
     }

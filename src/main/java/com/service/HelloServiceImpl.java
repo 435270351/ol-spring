@@ -18,7 +18,7 @@ public class HelloServiceImpl implements HelloService {
 
     public void say() {
         System.out.println("Hellos");
-//        enService.ha();
+        enService.ha();
     }
 
     public EnService getEnService() {

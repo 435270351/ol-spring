@@ -1,12 +1,10 @@
 package com.aspect;
 
-
 import spring.aop.MethodInvocation;
 import spring.common.annotation.After;
 import spring.common.annotation.Around;
 import spring.common.annotation.Aspect;
 import spring.common.annotation.Before;
-import spring.common.annotation.PointCut;
 
 /**
  * aop测试
@@ -18,24 +16,24 @@ import spring.common.annotation.PointCut;
 @Aspect
 public class AspectDemo {
 
-    @PointCut(value = "execution(* com.service.EnService.*(..))")
-    String pointCut;
+    //    @PointCut(value = "execution(* com.service.EnService.*(..))")
+    final String pointCut = "execution(* com.service.EnService.*(..))";
 
-    @PointCut(value = "execution(* com.service.HelloService.*(..))")
-    String pointCut2;
+    //    @PointCut(value = "execution(* com.service.HelloService.*(..))")
+    final String pointCut2 = "execution(* com.service.HelloService.*(..))";
 
-    @Before(value = "pointCut")
-    public void before(){
+    @Before(value = pointCut)
+    public void before() {
         System.out.println("Before");
     }
 
-    @After(value = "pointCut")
-    public void after(){
+    @After(value = pointCut)
+    public void after() {
         System.out.println("After");
     }
 
-    @Around(value = "pointCut")
-    public void around(MethodInvocation methodInvocation){
+    @Around(value = pointCut)
+    public void around(MethodInvocation methodInvocation) {
         System.out.println("Around Start");
 
         methodInvocation.invoke();
@@ -43,8 +41,8 @@ public class AspectDemo {
         System.out.println("Around End");
     }
 
-    @Before(value = "pointCut2")
-    public void beforeHello(){
+    @Before(value = pointCut2)
+    public void beforeHello() {
         System.out.println("hello before");
     }
 

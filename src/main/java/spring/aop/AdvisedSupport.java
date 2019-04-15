@@ -1,10 +1,11 @@
 package spring.aop;
 
 import spring.common.enums.AdviceEnum;
+
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 代理相关元素
@@ -15,57 +16,24 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class AdvisedSupport {
 
-    /**
-     * 通知对应着匹配关系
-     */
-    private static Map<AdviceEnum, List<AopMethod>> classMatcherMap = new ConcurrentHashMap<>();
 
     /**
-     * 所有的匹配关系
+     * 通知集合
      */
-    private static List<ClassMatcher> classMatcherList = new ArrayList<>();
+    private static List<Advisor> advisorList = new ArrayList<>();
 
-    static {
-        List<AopMethod> beforeList = new ArrayList<>();
-        List<AopMethod> aroundList = new ArrayList<>();
-        List<AopMethod> afterList = new ArrayList<>();
-
-        classMatcherMap.put(AdviceEnum.BEFORE, beforeList);
-        classMatcherMap.put(AdviceEnum.AROUND, aroundList);
-        classMatcherMap.put(AdviceEnum.AFTER, afterList);
-
-    }
-
-    private List<AopMethod> getAopMethod(AdviceEnum val) {
-        return classMatcherMap.get(val);
-    }
-
-    public List<AopMethod> getBeforeAopMethod() {
-        return getAopMethod(AdviceEnum.BEFORE);
-    }
-
-    public List<AopMethod> getAroundAopMethod() {
-        return getAopMethod(AdviceEnum.AROUND);
-    }
-
-    public List<AopMethod> getAfterAopMethod() {
-        return getAopMethod(AdviceEnum.AFTER);
-    }
-
-    public void addAopMethod(AdviceEnum adviceEnum, AopMethod aopMethod) {
-        getAopMethod(adviceEnum).add(aopMethod);
-    }
-
-    public void addClassMatcher(ClassMatcher classMatcher) {
-        classMatcherList.add(classMatcher);
-    }
-
-    public List<ClassMatcher> getClassMatcherList() {
-        return classMatcherList;
-    }
-
+    /**
+     * 判断是否需要进行代理
+     *
+     * @author:tangzw
+     * @date: 2019-04-15
+     * @since v1.0.0
+     * @param clazz
+     * @return
+     */
     public boolean classMatcher(Class clazz) {
-        for (ClassMatcher classMatcher : classMatcherList) {
+        for (Advisor advisor : advisorList) {
+            ClassMatcher classMatcher = advisor.getClassMatcher();
             if (classMatcher.matches(clazz)) {
                 return true;
             }
@@ -73,4 +41,46 @@ public class AdvisedSupport {
 
         return false;
     }
+
+    /**
+     * 获取通知连
+     *
+     * @author:tangzw
+     * @date: 2019-04-15
+     * @since v1.0.0
+     * @param method
+     * @return
+     */
+    public List<Advisor> getChainList(Method method){
+        List<Advisor> chainList = new ArrayList<>();
+
+        for (Advisor advisor : advisorList) {
+            ClassMatcher classMatcher = advisor.getClassMatcher();
+            if (classMatcher.matches(method)) {
+                chainList.add(advisor);
+            }
+        }
+
+        return chainList;
+    }
+
+    public void addAdvisor(Advisor advisor){
+        advisorList.add(advisor);
+    }
+
+    /**
+     * 改变
+     */
+    public void changeAdvisorSort(){
+        advisorList.sort(new Comparator<Advisor>() {
+            @Override
+            public int compare(Advisor o1, Advisor o2) {
+                AdviceEnum a1 = AdviceEnum.parse(o1.getMethodName());
+                AdviceEnum a2 = AdviceEnum.parse(o2.getMethodName());
+
+                return a1.getVal() - a2.getVal();
+            }
+        });
+    }
+
 }

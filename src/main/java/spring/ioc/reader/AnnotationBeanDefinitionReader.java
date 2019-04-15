@@ -1,15 +1,12 @@
 package spring.ioc.reader;
 
 import spring.aop.AdvisedSupport;
-import spring.aop.AopMethod;
+import spring.aop.Advisor;
 import spring.aop.AspectJExpressionPointcut;
-import spring.aop.ClassMatcher;
 import spring.common.annotation.After;
 import spring.common.annotation.Around;
 import spring.common.annotation.Aspect;
 import spring.common.annotation.Before;
-import spring.common.annotation.Component;
-import spring.common.annotation.PointCut;
 import spring.common.annotation.Resource;
 import spring.common.annotation.Scope;
 import spring.common.annotation.Service;
@@ -18,15 +15,13 @@ import spring.common.enums.ScopeEnum;
 import spring.ioc.bean.BeanDefinition;
 import spring.ioc.bean.BeanReference;
 import spring.ioc.bean.PropertyValue;
-import spring.ioc.factory.BeanDefinitionRegistry;
+import spring.ioc.factory.DefaultListableBeanFactory;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 注解加载
@@ -37,8 +32,8 @@ import java.util.Map;
  */
 public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
-    public AnnotationBeanDefinitionReader(BeanDefinitionRegistry beanDefinitionRegistry) {
-        super(beanDefinitionRegistry);
+    public AnnotationBeanDefinitionReader(DefaultListableBeanFactory defaultListableBeanFactory) {
+        super(defaultListableBeanFactory);
     }
 
     @Override
@@ -135,7 +130,7 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
 
                 } else if (clazz.isAnnotationPresent(Aspect.class)) {
                     // Aspect注解装配
-                    //                    registerAspectBeanDefinition(clazz);
+                    registerAspectBeanDefinition(clazz);
                 }
 
             } catch (Exception e) {
@@ -187,87 +182,68 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
 
         beanDefinition.setBeanClass(beanClass);
 
-        beanDefinitionRegistry.registerBeanDefinition(clazz.getSimpleName().toLowerCase(), beanDefinition);
+        defaultListableBeanFactory.registerBeanDefinition(clazz.getSimpleName().toLowerCase(), beanDefinition);
 
     }
 
-    //        private void registerAspectBeanDefinition(Class clazz) {
-    //            try {
-    //                Field[] fields = clazz.getDeclaredFields();
-    //                Method[] methods = clazz.getDeclaredMethods();
-    //                Object target = clazz.newInstance();
-    //
-    //                AdvisedSupport advisedSupport = abstractBeanFactory.getAdvisedSupport();
-    //
-    //                Map<String, ClassMatcher> pointCutMap = new HashMap<>();
-    //                //        Map<String, String> pointCutMap = new HashMap<>();
-    //
-    //                // 切点装配
-    //                for (Field field : fields) {
-    //                    PointCut pointCut = field.getDeclaredAnnotation(PointCut.class);
-    //                    if (pointCut != null) {
-    //                        String expression = pointCut.value();
-    //                        AspectJExpressionPointcut aspectPointCut = new AspectJExpressionPointcut();
-    //                        aspectPointCut.setExpression(expression);
-    //
-    //                        pointCutMap.put(field.getName(), aspectPointCut);
-    //                        advisedSupport.addClassMatcher(aspectPointCut);
-    //                    }
-    //                }
-    //
-    //                // 通知装配
-    //                for (Method method : methods) {
-    //                    AdviceEnum adviceEnum = null;
-    //                    ClassMatcher classMatcher = null;
-    //
-    //                    // 前置通知
-    //                    if (method.isAnnotationPresent(Before.class)) {
-    //                        Before before = method.getDeclaredAnnotation(Before.class);
-    //                        classMatcher = pointCutMap.get(before.value());
-    //
-    //                        if (classMatcher == null) {
-    //                            System.out.println("没有该切点：" + before.value());
-    //                            continue;
-    //                        }
-    //
-    //                        adviceEnum = AdviceEnum.BEFORE;
-    //
-    //                    } else if (method.isAnnotationPresent(Around.class)) {
-    //                        Around around = method.getDeclaredAnnotation(Around.class);
-    //                        classMatcher = pointCutMap.get(around.value());
-    //
-    //                        if (classMatcher == null) {
-    //                            System.out.println("没有该切点：" + around.value());
-    //                            continue;
-    //                        }
-    //
-    //                        adviceEnum = AdviceEnum.AROUND;
-    //                    } else if (method.isAnnotationPresent(After.class)) {
-    //                        After after = method.getDeclaredAnnotation(After.class);
-    //                        classMatcher = pointCutMap.get(after.value());
-    //
-    //                        if (classMatcher == null) {
-    //                            System.out.println("没有该切点：" + after.value());
-    //                            continue;
-    //                        }
-    //
-    //                        adviceEnum = AdviceEnum.AFTER;
-    //                    } else {
-    //                        continue;
-    //                    }
-    //
-    //                    AopMethod aopMethod = new AopMethod();
-    //                    aopMethod.setMethod(method);
-    //                    aopMethod.setTarget(target);
-    //                    aopMethod.setClassMatcher(classMatcher);
-    //
-    //                    advisedSupport.addAopMethod(adviceEnum, aopMethod);
-    //                }
-    //
-    //            } catch (Exception e) {
-    //                e.printStackTrace();
-    //            }
-    //
-    //        }
+    private void registerAspectBeanDefinition(Class clazz) {
+        try {
+            Field[] fields = clazz.getDeclaredFields();
+            Method[] methods = clazz.getDeclaredMethods();
+            Object target = clazz.newInstance();
+
+            AdvisedSupport advisedSupport = defaultListableBeanFactory.getAdvisedSupport();
+
+            // 通知装配
+            for (Method method : methods) {
+
+                String methodName = "";
+                String pointCut = "";
+
+                // 前置通知
+                if (method.isAnnotationPresent(Before.class)) {
+                    Before before = method.getDeclaredAnnotation(Before.class);
+                    methodName = AdviceEnum.BEFORE.name();
+                    pointCut = before.value();
+
+                } else if (method.isAnnotationPresent(Around.class)) {
+                    Around around = method.getDeclaredAnnotation(Around.class);
+                    methodName = AdviceEnum.AROUND.name();
+                    pointCut = around.value();
+
+                } else if (method.isAnnotationPresent(After.class)) {
+                    After after = method.getDeclaredAnnotation(After.class);
+                    methodName = AdviceEnum.AFTER.name();
+                    pointCut = after.value();
+
+                } else {
+                    continue;
+                }
+
+                // 获取切点
+                Object object = clazz.newInstance();
+                Field field = clazz.getDeclaredField(pointCut);
+                String expression = (String) field.get(object);
+
+                // 声明切面操作
+                AspectJExpressionPointcut aspectPointCut = new AspectJExpressionPointcut();
+                aspectPointCut.setExpression(expression);
+
+                Advisor advisor = new Advisor();
+                advisor.setMethod(method);
+                advisor.setTarget(target);
+                advisor.setClassMatcher(aspectPointCut);
+                advisor.setMethodName(methodName);
+
+                advisedSupport.addAdvisor(advisor);
+            }
+
+            advisedSupport.changeAdvisorSort();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

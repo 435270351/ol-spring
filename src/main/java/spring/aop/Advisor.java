@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
  * @date 2019-03-05
  * @since 1.0.0
  */
-public class AopMethod {
+public class Advisor {
 
     /**
      * 匹配关系
@@ -25,6 +25,11 @@ public class AopMethod {
      * 切面对象
      */
     private Object target;
+
+    /**
+     * before，after，通知类型
+     */
+    private String methodName;
 
     public ClassMatcher getClassMatcher() {
         return classMatcher;
@@ -48,5 +53,13 @@ public class AopMethod {
 
     public void setTarget(Object target) {
         this.target = target;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
     }
 }
