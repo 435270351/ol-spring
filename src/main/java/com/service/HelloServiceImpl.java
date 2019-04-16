@@ -13,12 +13,12 @@ import spring.common.annotation.Service;
 @Service
 public class HelloServiceImpl implements HelloService {
 
-    @Resource
-    public EnService enService;
+//    @Resource
+//    public EnService enService;
 
     public void say() {
         System.out.println("Hellos");
-        enService.ha();
+//        enService.ha();
     }
 
 //    public EnService getEnService() {

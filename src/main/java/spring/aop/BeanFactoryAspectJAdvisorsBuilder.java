@@ -1,6 +1,5 @@
 package spring.aop;
 
-import spring.common.annotation.Aspect;
 import spring.ioc.bean.BeanDefinition;
 import spring.ioc.factory.AspectJAdvisorFactory;
 import spring.ioc.factory.DefaultListableBeanFactory;
@@ -12,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * （描述）
+ *
  *
  * @author tangzw
  * @date 2019-04-16
