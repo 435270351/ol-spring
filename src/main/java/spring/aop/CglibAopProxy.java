@@ -5,6 +5,7 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 import spring.aop.invocation.MethodInvocation;
 import spring.aop.invocation.ReflectiveMethodInvocation;
+import spring.ioc.factory.AdvisedSupport;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -16,15 +17,17 @@ import java.util.List;
  * @date 2019-03-03
  * @since 1.0.0
  */
-public class CglibAopProxy extends AbstractAopProxy {
+public class CglibAopProxy implements AopProxy {
 
-    public CglibAopProxy(AdvisedSupport advisedSupport, TargetSource targetSource) {
-        super(advisedSupport, targetSource);
+    private AdvisedSupport advisedSupport;
+
+    public CglibAopProxy(AdvisedSupport advisedSupport) {
+        this.advisedSupport = advisedSupport;
     }
 
     @Override
     public Object getProxy() {
-        TargetSource targetSource = getTargetSource();
+        TargetSource targetSource = advisedSupport.getTargetSource();
 
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(targetSource.getTargetClass());
@@ -38,16 +41,11 @@ public class CglibAopProxy extends AbstractAopProxy {
 
         @Override
         public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-            AdvisedSupport advisedSupport = getAdvisedSupport();
 
             // 获取通知链
-            List<Advisor> chainList = advisedSupport.getChainList(method);
+            List<Object> chainList = advisedSupport.getInterceptorsAndDynamicInterceptionAdvice(method);
 
-            if (chainList.isEmpty()) {
-                method.invoke(o, objects);
-            }
-
-            MethodInvocation methodInvocation = new ReflectiveMethodInvocation(chainList);
+            MethodInvocation methodInvocation = new ReflectiveMethodInvocation(advisedSupport.getTargetSource().getTarget(), method, objects, chainList);
             Object object = methodInvocation.proceed();
 
             return object;

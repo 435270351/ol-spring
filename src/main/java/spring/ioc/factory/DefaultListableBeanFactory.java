@@ -1,7 +1,6 @@
 package spring.ioc.factory;
 
 import org.apache.commons.lang.StringUtils;
-import spring.aop.AdvisedSupport;
 import spring.aop.AdvisorAutoProxyCreator;
 import spring.ioc.bean.BeanDefinition;
 import spring.ioc.bean.BeanReference;
@@ -29,6 +28,9 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
 
     @Override
     public void registerBeanDefinition(String key, BeanDefinition val) {
+        if (beanDefinitionMap.containsKey(key)) {
+            throw new RuntimeException("Bean name " + key + " is already used");
+        }
         beanDefinitionMap.put(key, val);
     }
 
@@ -42,18 +44,17 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
         Object object = createBeanInstance(beanDefinition);
 
         // 属性注入
-        populateBean(beanDefinition,object);
+        populateBean(beanDefinition, object);
 
         // 生成代理对象
-        object = initializeBean(beanDefinition);
+        object = initializeBean(beanDefinition, object);
 
         return object;
     }
 
     protected Object createBeanInstance(BeanDefinition beanDefinition) {
         try {
-            String beanClass = beanDefinition.getBeanClass();
-            Object object = Class.forName(beanClass).newInstance();
+            Object object = beanDefinition.getBeanClass().newInstance();
 
             return object;
         } catch (Exception e) {
@@ -90,7 +91,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
 
     }
 
-    protected void autowireByName(BeanReference beanReference) throws Exception{
+    protected void autowireByName(BeanReference beanReference) throws Exception {
         Object object = getBean(beanReference.getBeanName());
         beanReference.setValue(object);
     }
@@ -103,7 +104,7 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
         Object object = null;
         for (String name : nameSet) {
             BeanDefinition beanDefinition = beanDefinitionMap.get(name);
-            Class cla = Class.forName(beanDefinition.getBeanClass());
+            Class cla = beanDefinition.getBeanClass();
             for (Class in : cla.getInterfaces()) {
                 if (in.getName().equals(beanReference.getBeanClass())) {
                     object = getBean(name);
@@ -119,13 +120,13 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
         beanReference.setValue(object);
     }
 
-    protected Object initializeBean(BeanDefinition beanDefinition)throws Exception{
-        AdvisorAutoProxyCreator proxyCreator = new AdvisorAutoProxyCreator(advisedSupport);
+    protected Object initializeBean(BeanDefinition beanDefinition, Object object) throws Exception {
+        AdvisorAutoProxyCreator proxyCreator = new AdvisorAutoProxyCreator(this);
         // 前置操作
-        Object proxyBean = proxyCreator.postProcessBeforeInitialization(beanDefinition.getBean());
+        Object proxyBean = proxyCreator.postProcessBeforeInitialization(object);
 
         // 后置操作
-        proxyBean = proxyCreator.postProcessAfterInitialization(beanDefinition.getBean());
+        proxyBean = proxyCreator.postProcessAfterInitialization(object);
 
         beanDefinition.setBean(proxyBean);
 

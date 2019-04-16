@@ -23,7 +23,7 @@ public class BeanDefinition {
     /**
      * 类路径
      */
-    private String beanClass;
+    private Class beanClass;
 
     /**
      * 需要注入的属性变量
@@ -35,11 +35,20 @@ public class BeanDefinition {
      */
     private String scope;
 
+    /**
+     * 注解
+     */
+    private String annotation;
+
     public boolean isSingleton() {
         return scope == null || "singleton".equals(scope) || "".equals(scope);
     }
 
     public boolean isPrototype() {
         return "prototype".equals(scope);
+    }
+
+    public boolean isAspect() {
+        return annotation != null && "Aspect".equals(annotation);
     }
 }

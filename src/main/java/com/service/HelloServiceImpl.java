@@ -21,11 +21,11 @@ public class HelloServiceImpl implements HelloService {
         enService.ha();
     }
 
-    public EnService getEnService() {
-        return enService;
-    }
-
-    public void setEnService(EnService enService) {
-        this.enService = enService;
-    }
+//    public EnService getEnService() {
+//        return enService;
+//    }
+//
+//    public void setEnService(EnService enService) {
+//        this.enService = enService;
+//    }
 }

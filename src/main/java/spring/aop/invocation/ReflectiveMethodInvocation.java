@@ -1,8 +1,5 @@
 package spring.aop.invocation;
 
-import spring.aop.Advisor;
-
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -15,7 +12,7 @@ import java.util.List;
  */
 public class ReflectiveMethodInvocation implements MethodInvocation {
 
-    private List<MethodInterceptor> chainList;
+    private List<Object> chainList;
 
     private Method method;
 
@@ -25,26 +22,26 @@ public class ReflectiveMethodInvocation implements MethodInvocation {
 
     private int currentIndex = 0;
 
-    public ReflectiveMethodInvocation(Object target,Method method,Object[] arguments,List<MethodInterceptor> chainList){
-       this.target = target;
-       this.method = method;
-       this.arguments = arguments;
+    public ReflectiveMethodInvocation(Object target, Method method, Object[] arguments, List<Object> chainList) {
+        this.target = target;
+        this.method = method;
+        this.arguments = arguments;
         this.chainList = chainList;
     }
 
     @Override
     public Object proceed() throws Exception {
-        if (currentIndex == chainList.size()){
+        if (currentIndex == chainList.size()) {
             return invokeJoinpoint();
         }
 
-        MethodInterceptor methodInterceptor = chainList.get(currentIndex++);
+        MethodInterceptor methodInterceptor = (MethodInterceptor) chainList.get(currentIndex++);
         Object object = methodInterceptor.invoke(this);
 
         return object;
     }
 
     public Object invokeJoinpoint() throws Exception {
-        return method.invoke(target,arguments);
+        return method.invoke(target, arguments);
     }
 }

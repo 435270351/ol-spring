@@ -1,6 +1,6 @@
 package com.aspect;
 
-import spring.aop.MethodInvocation;
+import spring.aop.invocation.MethodInvocation;
 import spring.common.annotation.After;
 import spring.common.annotation.Around;
 import spring.common.annotation.Aspect;
@@ -17,10 +17,10 @@ import spring.common.annotation.Before;
 public class AspectDemo {
 
     //    @PointCut(value = "execution(* com.service.EnService.*(..))")
-    final String pointCut = "execution(* com.service.EnService.*(..))";
+    final String pointCut = "execution(* com.service..*(..))";
 
     //    @PointCut(value = "execution(* com.service.HelloService.*(..))")
-    final String pointCut2 = "execution(* com.service.HelloService.*(..))";
+//    final String pointCut2 = "execution(* com.service.HelloService.*(..))";
 
     @Before(value = pointCut)
     public void before() {
@@ -33,17 +33,17 @@ public class AspectDemo {
     }
 
     @Around(value = pointCut)
-    public void around(MethodInvocation methodInvocation) {
+    public void around(MethodInvocation methodInvocation) throws Exception {
         System.out.println("Around Start");
 
-        methodInvocation.invoke();
+        methodInvocation.proceed();
 
         System.out.println("Around End");
     }
 
-    @Before(value = pointCut2)
-    public void beforeHello() {
-        System.out.println("hello before");
-    }
+//    @Before(value = pointCut2)
+//    public void beforeHello() {
+//        System.out.println("hello before");
+//    }
 
 }

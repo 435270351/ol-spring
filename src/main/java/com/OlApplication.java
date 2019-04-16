@@ -14,7 +14,7 @@ import spring.ioc.context.ApplicationContext;
 public class OlApplication {
 
     public static void main(String[] args) throws Exception {
-        String[] locations = { "com.service" };
+        String[] locations = { "com" };
         ApplicationContext applicationContext = new AnnotationApplicationContext(locations);
         HelloService service = (HelloService) applicationContext.getBean("HelloServiceImpl");
 

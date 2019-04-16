@@ -24,6 +24,12 @@ public class TargetSource {
      */
     private Object target;
 
+    public TargetSource(Object target){
+        this.target = target;
+        this.interfaces = target.getClass().getInterfaces();
+        this.targetClass = target.getClass();
+    }
+
     public Class getTargetClass() {
         return targetClass;
     }

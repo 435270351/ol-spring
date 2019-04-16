@@ -20,7 +20,7 @@ public class AspectJBeforeAdvice implements MethodInterceptor {
     @Override
     public Object invoke(MethodInvocation methodInvocation) {
         try {
-            advisor.getMethod().invoke(advisor.getTarget(), methodInvocation);
+            advisor.getMethod().invoke(advisor.getTarget());
             Object object = methodInvocation.proceed();
 
             return object;

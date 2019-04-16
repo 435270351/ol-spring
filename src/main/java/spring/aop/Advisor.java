@@ -1,5 +1,7 @@
 package spring.aop;
 
+import spring.common.enums.AdviceEnum;
+
 import java.lang.reflect.Method;
 
 /**
@@ -9,7 +11,7 @@ import java.lang.reflect.Method;
  * @date 2019-03-05
  * @since 1.0.0
  */
-public class Advisor {
+public class Advisor implements Comparable<Advisor> {
 
     /**
      * 匹配关系
@@ -61,5 +63,13 @@ public class Advisor {
 
     public void setMethodName(String methodName) {
         this.methodName = methodName;
+    }
+
+    @Override
+    public int compareTo(Advisor o) {
+        AdviceEnum a1 = AdviceEnum.parse(methodName);
+        AdviceEnum a2 = AdviceEnum.parse(o.getMethodName());
+
+        return a1.getVal() - a2.getVal();
     }
 }

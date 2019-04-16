@@ -1,16 +1,9 @@
 package spring.ioc.reader;
 
-import spring.aop.AdvisedSupport;
-import spring.aop.Advisor;
-import spring.aop.AspectJExpressionPointcut;
-import spring.common.annotation.After;
-import spring.common.annotation.Around;
 import spring.common.annotation.Aspect;
-import spring.common.annotation.Before;
 import spring.common.annotation.Resource;
 import spring.common.annotation.Scope;
 import spring.common.annotation.Service;
-import spring.common.enums.AdviceEnum;
 import spring.common.enums.ScopeEnum;
 import spring.ioc.bean.BeanDefinition;
 import spring.ioc.bean.BeanReference;
@@ -19,7 +12,6 @@ import spring.ioc.factory.DefaultListableBeanFactory;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +72,7 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
         File[] files = file.listFiles();
         List<String> classPathList = new ArrayList<>();
 
-        if (file.length() == 0) {
+        if (files.length == 0) {
             return classPathList;
         }
 
@@ -180,69 +172,21 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
             }
         }
 
-        beanDefinition.setBeanClass(beanClass);
+        beanDefinition.setBeanClass(clazz);
+        beanDefinition.setAnnotation("Service");
 
         defaultListableBeanFactory.registerBeanDefinition(clazz.getSimpleName().toLowerCase(), beanDefinition);
 
     }
 
     private void registerAspectBeanDefinition(Class clazz) {
-        try {
-            Field[] fields = clazz.getDeclaredFields();
-            Method[] methods = clazz.getDeclaredMethods();
-            Object target = clazz.newInstance();
+        BeanDefinition beanDefinition = new BeanDefinition();
+        beanDefinition.setBeanClass(clazz);
+        beanDefinition.setAnnotation("Aspect");
 
-            AdvisedSupport advisedSupport = defaultListableBeanFactory.getAdvisedSupport();
+        defaultListableBeanFactory.registerBeanDefinition(clazz.getSimpleName().toLowerCase(), beanDefinition);
 
-            // 通知装配
-            for (Method method : methods) {
 
-                String methodName = "";
-                String pointCut = "";
-
-                // 前置通知
-                if (method.isAnnotationPresent(Before.class)) {
-                    Before before = method.getDeclaredAnnotation(Before.class);
-                    methodName = AdviceEnum.BEFORE.name();
-                    pointCut = before.value();
-
-                } else if (method.isAnnotationPresent(Around.class)) {
-                    Around around = method.getDeclaredAnnotation(Around.class);
-                    methodName = AdviceEnum.AROUND.name();
-                    pointCut = around.value();
-
-                } else if (method.isAnnotationPresent(After.class)) {
-                    After after = method.getDeclaredAnnotation(After.class);
-                    methodName = AdviceEnum.AFTER.name();
-                    pointCut = after.value();
-
-                } else {
-                    continue;
-                }
-
-                // 获取切点
-                Object object = clazz.newInstance();
-                Field field = clazz.getDeclaredField(pointCut);
-                String expression = (String) field.get(object);
-
-                // 声明切面操作
-                AspectJExpressionPointcut aspectPointCut = new AspectJExpressionPointcut();
-                aspectPointCut.setExpression(expression);
-
-                Advisor advisor = new Advisor();
-                advisor.setMethod(method);
-                advisor.setTarget(target);
-                advisor.setClassMatcher(aspectPointCut);
-                advisor.setMethodName(methodName);
-
-                advisedSupport.addAdvisor(advisor);
-            }
-
-            advisedSupport.changeAdvisorSort();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 

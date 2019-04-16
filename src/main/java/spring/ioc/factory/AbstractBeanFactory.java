@@ -64,4 +64,8 @@ public abstract class AbstractBeanFactory implements BeanFactory {
     }
 
     protected abstract Object createBean(BeanDefinition beanDefinition) throws Exception;
+
+    public Map<String, BeanDefinition> getBeanDefinitionMap() {
+        return beanDefinitionMap;
+    }
 }
