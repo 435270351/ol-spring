@@ -41,6 +41,15 @@ public class ReflectiveMethodInvocation implements MethodInvocation {
         return object;
     }
 
+    /**
+     * 执行目标方法
+     *
+     * @author:tangzw
+     * @date: 2019-04-17
+     * @since v1.0.0
+     * @return
+     * @throws Exception
+     */
     public Object invokeJoinpoint() throws Exception {
         return method.invoke(target, arguments);
     }

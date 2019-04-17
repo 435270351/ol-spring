@@ -5,7 +5,7 @@ import spring.common.enums.AdviceEnum;
 import java.lang.reflect.Method;
 
 /**
- * 切面方法
+ * 保存通知相关方法
  *
  * @author tangzw
  * @date 2019-03-05
@@ -29,7 +29,7 @@ public class Advisor implements Comparable<Advisor> {
     private Object target;
 
     /**
-     * before，after，通知类型
+     * before，after，通知类型名
      */
     private String methodName;
 

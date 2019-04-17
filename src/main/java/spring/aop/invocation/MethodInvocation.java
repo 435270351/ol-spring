@@ -1,7 +1,7 @@
 package spring.aop.invocation;
 
 /**
- * 方法执行，使用适配器模式，before、after、around
+ * 方法执行
  *
  * @author tangzw
  * @date 2019-03-04

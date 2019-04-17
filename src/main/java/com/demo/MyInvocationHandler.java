@@ -8,13 +8,6 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
-/**
- * （描述）
- *
- * @author tangzw
- * @date 2019-01-30
- * @since (版本)
- */
 public class MyInvocationHandler implements InvocationHandler {
 
     private Object target;
@@ -28,6 +21,8 @@ public class MyInvocationHandler implements InvocationHandler {
         System.out.println("~~~~before~~~~");
 
         Object val = method.invoke(target, args);
+
+        System.out.println("~~~~after~~~~");
 
         return val;
     }

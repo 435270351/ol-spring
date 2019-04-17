@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * 负责获取通知链
  *
  * @author tangzw
  * @date 2019-04-16
- * @since (版本)
+ * @since 1.0.0
  */
 public class BeanFactoryAspectJAdvisorsBuilder {
 
@@ -33,6 +33,14 @@ public class BeanFactoryAspectJAdvisorsBuilder {
         advisorsCache = new HashMap<>();
     }
 
+    /**
+     * 构建AspectJ通知链
+     *
+     * @author:tangzw
+     * @date: 2019-04-17
+     * @since v1.0.0
+     * @return
+     */
     public List<Advisor> buildAspectJAdvisors() {
         Map<String, BeanDefinition> beanDefinitionMap = defaultListableBeanFactory.getBeanDefinitionMap();
         Set<String> beanNameSet = beanDefinitionMap.keySet();

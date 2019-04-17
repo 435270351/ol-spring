@@ -18,6 +18,9 @@ import java.util.List;
  */
 public class AdvisedSupport {
 
+    /**
+     * 目标类
+     */
     private TargetSource targetSource;
 
     /**
@@ -30,6 +33,9 @@ public class AdvisedSupport {
      */
     private AdvisorChainFactory advisorChainFactory;
 
+    /**
+     * 对方法做缓存
+     */
     private HashMap<String,List> methodCache;
 
     public AdvisedSupport(){

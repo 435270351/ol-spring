@@ -1,6 +1,5 @@
 package spring.common.enums;
 
-import lombok.val;
 import org.apache.commons.lang.StringUtils;
 
 /**
@@ -20,6 +19,9 @@ public enum AdviceEnum {
 
     private String desc;
 
+    /**
+     * 用于对通知方法进行排序
+     */
     private int val;
 
     AdviceEnum(String desc, int val) {

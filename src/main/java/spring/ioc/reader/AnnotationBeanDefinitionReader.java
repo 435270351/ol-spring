@@ -1,9 +1,11 @@
 package spring.ioc.reader;
 
+import org.apache.commons.lang.StringUtils;
 import spring.common.annotation.Aspect;
 import spring.common.annotation.Resource;
 import spring.common.annotation.Scope;
 import spring.common.annotation.Service;
+import spring.common.enums.AnnotationEnum;
 import spring.common.enums.ScopeEnum;
 import spring.ioc.bean.BeanDefinition;
 import spring.ioc.bean.BeanReference;
@@ -16,7 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 注解加载
+ * 注解解析类
+ * 负责解析包下添加了注解的方法
  *
  * @author tangzw
  * @date 2019-02-26
@@ -162,10 +165,11 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
 
                 Resource resource = field.getAnnotation(Resource.class);
                 String beanName = resource.value();
+                beanName = StringUtils.isEmpty(beanName) ? field.getName() : beanName;
 
-                // 根据name注入
+                // name注入
                 beanReference.setBeanName(beanName);
-                // 根据type注入
+                // type注入
                 beanReference.setBeanClass(typeBeanClass);
 
                 beanDefinition.getPropertyValueList().add(new PropertyValue(fieldName, beanReference));
@@ -173,7 +177,7 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
         }
 
         beanDefinition.setBeanClass(clazz);
-        beanDefinition.setAnnotation("Service");
+        beanDefinition.setAnnotation(AnnotationEnum.Service.name());
 
         defaultListableBeanFactory.registerBeanDefinition(clazz.getSimpleName().toLowerCase(), beanDefinition);
 
@@ -182,11 +186,9 @@ public class AnnotationBeanDefinitionReader extends AbstractBeanDefinitionReader
     private void registerAspectBeanDefinition(Class clazz) {
         BeanDefinition beanDefinition = new BeanDefinition();
         beanDefinition.setBeanClass(clazz);
-        beanDefinition.setAnnotation("Aspect");
+        beanDefinition.setAnnotation(AnnotationEnum.Aspect.name());
 
         defaultListableBeanFactory.registerBeanDefinition(clazz.getSimpleName().toLowerCase(), beanDefinition);
-
-
 
     }
 

@@ -1,20 +1,19 @@
 package com.service;
 
+import spring.common.annotation.Resource;
 import spring.common.annotation.Service;
 
-/**
- * （描述）
- *
- * @author tangzw
- * @date 2019-02-26
- * @since (版本)
- */
 @Service
-public class EnServiceImpl implements EnService {
+public class EnServiceImpl {
 
-    @Override
+    @Resource
+    HelloService helloService;
+
     public void ha() {
         System.out.println("ha");
+        helloService.say();
     }
+
+
 
 }

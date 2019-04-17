@@ -3,11 +3,11 @@ package spring.ioc.factory;
 import spring.ioc.bean.BeanDefinition;
 
 /**
- * （描述）
+ * bean关系注册
  *
  * @author tangzw
  * @date 2019-04-11
- * @since (版本)
+ * @since 1.0.0
  */
 public interface BeanDefinitionRegistry {
 

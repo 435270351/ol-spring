@@ -6,7 +6,7 @@ import spring.aop.JdkAopProxy;
 import spring.aop.TargetSource;
 
 /**
- * 代理工厂
+ * 代理工厂，负责生产代理对象
  *
  * @author tangzw
  * @date 2019-04-16

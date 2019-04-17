@@ -40,48 +40,80 @@ public class AdvisorAutoProxyCreator implements BeanPostProcessor {
     public Object postProcessAfterInitialization(Object bean) throws Exception {
 
         Class clazz = bean.getClass();
+        String key = clazz.getName();
 
-        if (advisedBeans.containsKey(clazz.getName())){
+        if (advisedBeans.containsKey(key) && !advisedBeans.get(key)) {
             return bean;
         }
 
+        // 获取实际的通知链
         List<Advisor> specificInterceptorList = getAdvicesAndAdvisorsForBean(clazz);
 
-        if (specificInterceptorList.size() == 0){
-            advisedBeans.put(clazz.getName(),false);
+        if (specificInterceptorList.size() == 0) {
+            advisedBeans.put(key, false);
             return bean;
         }
 
-        Object proxy = this.createProxy(bean,specificInterceptorList);
-        advisedBeans.put(clazz.getName(),true);
+        Object proxy = this.createProxy(bean, specificInterceptorList);
+        advisedBeans.put(key, true);
 
         return proxy;
     }
 
-    protected List<Advisor> getAdvicesAndAdvisorsForBean(Class beanClass){
+    /**
+     * 通过beanClass获取通知链
+     *
+     * @author:tangzw
+     * @date: 2019-04-17
+     * @since v1.0.0
+     * @param beanClass
+     * @return
+     */
+    protected List<Advisor> getAdvicesAndAdvisorsForBean(Class beanClass) {
 
         return findEligibleAdvisors(beanClass);
     }
 
-    protected List<Advisor> findEligibleAdvisors(Class beanClass){
+    protected List<Advisor> findEligibleAdvisors(Class beanClass) {
+        // 获取所有候选的通知链
         List<Advisor> candidateAdvisors = findCandidateAdvisors();
-        List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(beanClass,candidateAdvisors);
+        // 获取符合的通知链
+        List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(beanClass, candidateAdvisors);
+        // 对通知链进行排序，after-around-before
         Collections.sort(eligibleAdvisors);
 
         return eligibleAdvisors;
     }
 
-    protected List<Advisor> findCandidateAdvisors(){
-        BeanFactoryAspectJAdvisorsBuilder beanFactoryAspectJAdvisorsBuilder = new BeanFactoryAspectJAdvisorsBuilder(new AspectJAdvisorFactory(),defaultListableBeanFactory);
+    /**
+     * 获取所有候选的通知链
+     *
+     * @author:tangzw
+     * @date: 2019-04-17
+     * @since v1.0.0
+     * @return
+     */
+    protected List<Advisor> findCandidateAdvisors() {
+        BeanFactoryAspectJAdvisorsBuilder beanFactoryAspectJAdvisorsBuilder = new BeanFactoryAspectJAdvisorsBuilder(new AspectJAdvisorFactory(), defaultListableBeanFactory);
         List<Advisor> advisorList = beanFactoryAspectJAdvisorsBuilder.buildAspectJAdvisors();
 
         return advisorList;
     }
 
-    protected List<Advisor> findAdvisorsThatCanApply(Class beanClass, List<Advisor> candidateAdvisors){
+    /**
+     * 获取符合beanClass的通知链
+     *
+     * @author:tangzw
+     * @date: 2019-04-17
+     * @since v1.0.0
+     * @param beanClass
+     * @param candidateAdvisors
+     * @return
+     */
+    protected List<Advisor> findAdvisorsThatCanApply(Class beanClass, List<Advisor> candidateAdvisors) {
         List<Advisor> advisorList = new ArrayList<>();
-        for (Advisor advisor:candidateAdvisors){
-            if (advisor.getClassMatcher().matches(beanClass)){
+        for (Advisor advisor : candidateAdvisors) {
+            if (advisor.getClassMatcher().matches(beanClass)) {
                 advisorList.add(advisor);
             }
         }
@@ -89,7 +121,17 @@ public class AdvisorAutoProxyCreator implements BeanPostProcessor {
         return advisorList;
     }
 
-    protected Object createProxy(Object bean,List<Advisor> specificInterceptorList){
+    /**
+     * 生成代理对象
+     *
+     * @author:tangzw
+     * @date: 2019-04-17
+     * @since v1.0.0
+     * @param bean
+     * @param specificInterceptorList
+     * @return
+     */
+    protected Object createProxy(Object bean, List<Advisor> specificInterceptorList) {
 
         ProxyFactory proxyFactory = new ProxyFactory();
 

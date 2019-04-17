@@ -12,19 +12,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * AbstractBeanFactory
+ * 默认的beanFactory
  *
  * @author tangzw
  * @date 2019-02-26
  * @since 1.0.0
  */
 public class DefaultListableBeanFactory extends AbstractBeanFactory implements BeanDefinitionRegistry {
-
-    private AdvisedSupport advisedSupport = new AdvisedSupport();
-
-    public AdvisedSupport getAdvisedSupport() {
-        return advisedSupport;
-    }
 
     @Override
     public void registerBeanDefinition(String key, BeanDefinition val) {
@@ -73,11 +67,11 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
             if (propertyValue.getValue() instanceof BeanReference) {
                 BeanReference beanReference = (BeanReference) propertyValue.getValue();
 
-                if (StringUtils.isNotEmpty(beanReference.getBeanName())) {
+                if (StringUtils.isNotEmpty(beanReference.getBeanName()) && beanDefinitionMap.containsKey(beanReference.getBeanName())) {
                     // 根据name获取对象
                     this.autowireByName(beanReference);
 
-                } else {
+                } else if (beanReference.getValue() == null) {
                     // 根据type获取对象
                     this.autowireByType(beanReference);
                 }
@@ -104,9 +98,15 @@ public class DefaultListableBeanFactory extends AbstractBeanFactory implements B
         Object object = null;
         for (String name : nameSet) {
             BeanDefinition beanDefinition = beanDefinitionMap.get(name);
-            Class cla = beanDefinition.getBeanClass();
-            for (Class in : cla.getInterfaces()) {
-                if (in.getName().equals(beanReference.getBeanClass())) {
+            Class clazz = beanDefinition.getBeanClass();
+
+            if (clazz.getName().equals(beanReference.getBeanClass())) {
+                object = getBean(name);
+                beanNameSet.add(name);
+            }
+
+            for (Class item : clazz.getInterfaces()) {
+                if (item.getName().equals(beanReference.getBeanClass())) {
                     object = getBean(name);
                     beanNameSet.add(name);
                 }

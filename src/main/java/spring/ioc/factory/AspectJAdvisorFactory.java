@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * （描述）
+ * AspectJ通知工厂，负责生产AspectJ通知
  *
  * @author tangzw
  * @date 2019-04-16
- * @since (版本)
+ * @since 1.0.0
  */
 public class AspectJAdvisorFactory {
 
@@ -64,6 +64,7 @@ public class AspectJAdvisorFactory {
                     // 声明切面操作
                     AspectJExpressionPointcut aspectPointCut = new AspectJExpressionPointcut();
                     aspectPointCut.setExpression(expression);
+
 
                     Advisor advisor = new Advisor();
                     advisor.setMethod(method);
