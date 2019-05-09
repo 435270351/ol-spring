@@ -10,7 +10,7 @@ public class EnServiceImpl {
     HelloService helloService;
 
     public void ha() {
-        System.out.println("ha");
+        System.out.println("EnServiceImpl~~~~~");
         helloService.say();
     }
 

@@ -16,11 +16,7 @@ import spring.common.annotation.Before;
 @Aspect
 public class AspectDemo {
 
-    //    @PointCut(value = "execution(* com.service.EnService.*(..))")
     final String pointCut = "execution(* com.service..*(..))";
-
-    //    @PointCut(value = "execution(* com.service.HelloService.*(..))")
-//    final String pointCut2 = "execution(* com.service.HelloService.*(..))";
 
     @Before(value = pointCut)
     public void before() {
@@ -40,10 +36,5 @@ public class AspectDemo {
 
         System.out.println("Around End");
     }
-
-//    @Before(value = pointCut2)
-//    public void beforeHello() {
-//        System.out.println("hello before");
-//    }
 
 }

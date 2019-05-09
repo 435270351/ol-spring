@@ -7,7 +7,6 @@ import spring.aop.invocation.AspectJAroundAdvice;
 import spring.aop.invocation.AspectJBeforeAdvice;
 import spring.aop.invocation.MethodInterceptor;
 import spring.common.enums.AdviceEnum;
-import spring.common.enums.AnnotationEnum;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

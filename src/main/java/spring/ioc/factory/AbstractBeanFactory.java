@@ -28,7 +28,6 @@ public abstract class AbstractBeanFactory implements BeanFactory {
     protected Object doGetBean(String name) throws Exception {
         // 不区分大小写
         BeanDefinition beanDefinition = beanDefinitionMap.get(name.toLowerCase());
-
         if (beanDefinition == null) {
             throw new RuntimeException("不存在的bean：" + name);
         }

@@ -18,9 +18,6 @@ public class OlApplication {
         String[] locations = { "com" };
         ApplicationContext applicationContext = new AnnotationApplicationContext(locations);
 
-//        HelloService service = (HelloService) applicationContext.getBean("HelloServiceImpl");
-//        service.say();
-
         EnServiceImpl service = (EnServiceImpl) applicationContext.getBean("EnServiceImpl");
         service.ha();
     }

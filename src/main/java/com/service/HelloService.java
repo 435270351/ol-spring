@@ -4,5 +4,4 @@ public interface HelloService {
 
     void say();
 
-    void say2();
 }

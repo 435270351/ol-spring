@@ -11,7 +11,7 @@ public class HelloServiceImpl implements HelloService {
         say2();
     }
 
-    public void say2(){
+    void say2() {
         System.out.println("22");
     }
 }
